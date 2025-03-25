@@ -5,6 +5,7 @@ import styled from "styled-components";
 import CabinRow from "./CabinRow";
 
 const Table = styled.div`
+  --gtc: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   border: 1px solid var(--color-grey-200);
 
   font-size: 1.4rem;
@@ -15,7 +16,7 @@ const Table = styled.div`
 
 const TableHeader = styled.header`
   display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  grid-template-columns: var(--gtc);
   column-gap: 2.4rem;
   align-items: center;
 
@@ -34,7 +35,7 @@ function CabinTable() {
     data: cabins,
     error,
   } = useQuery({
-    queryKey: ["cabin"],
+    queryKey: ["cabins"],
     queryFn: getCabins,
   });
   if (isLoading) return <Spinner />;
