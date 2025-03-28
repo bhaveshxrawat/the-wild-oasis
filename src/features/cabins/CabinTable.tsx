@@ -50,6 +50,7 @@ function CabinTable() {
         <div className=""></div>
       </TableHeader>
       {cabins?.map((cabin) => (
+        // @ts-expect-error db-local discrepancy
         <CabinRow key={cabin.id} cabin={cabin} />
       ))}
     </Table>

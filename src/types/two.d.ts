@@ -1,4 +1,4 @@
-type CabinProps = {
+interface CabinProps {
   id: number;
   created_at: string;
   name: string;
@@ -7,4 +7,8 @@ type CabinProps = {
   discount: number;
   description: string;
   image: string;
-};
+}
+
+interface CabinPropsLocal extends CabinProps {
+  image: FileList;
+}
