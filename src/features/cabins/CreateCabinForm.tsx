@@ -1,36 +1,21 @@
-import styled from "styled-components";
-
 import Input from "@/ui/Input";
 import Form from "@/ui/Form";
 import Button from "@/ui/Button";
 import FileInput from "@/ui/FileInput";
 import Textarea from "@/ui/Textarea";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCabin } from "@/services/apiCabins";
-import toast from "react-hot-toast";
 import FormRow from "@/ui/FormRow";
+import { useCreateCabin } from "./hooks/useCreateCabin";
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } =
     useForm<CabinPropsLocal>();
   const { errors } = formState;
-  const queryClient = useQueryClient();
-  const { mutate, isPending } = useMutation({
-    mutationFn: createCabin,
-    onSuccess: () => {
-      toast.success("New cabin created!");
-      queryClient.invalidateQueries({
-        queryKey: ["cabins"],
-      });
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { createCabin, isPending } = useCreateCabin();
   function onSubmit(data: CabinPropsLocal) {
-    mutate(data);
+    createCabin(data, {
+      onSuccess: () => reset(),
+    });
     // console.log(data);
   }
   function onError(errors: any) {
@@ -109,7 +94,7 @@ function CreateCabinForm() {
             Cancel
           </Button>
           <Button size="medium" variation="primary" disabled={isPending}>
-            Edit cabin
+            Add cabin
           </Button>
         </>
       </FormRow>
