@@ -7,19 +7,29 @@ import { useForm } from "react-hook-form";
 import FormRow from "@/ui/FormRow";
 import { useCreateCabin } from "./hooks/useCreateCabin";
 
-function CreateCabinForm() {
+function CreateCabinForm({
+  cancelHandler,
+}: {
+  cancelHandler?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+}) {
   const { register, handleSubmit, reset, getValues, formState } =
     useForm<CabinProps>();
   const { errors } = formState;
   const { createCabin, isPending } = useCreateCabin();
   function onSubmit(data: CabinProps) {
     createCabin(data, {
-      onSuccess: () => reset(),
+      onSuccess: () => {
+        reset();
+        cancelHandler ? cancelHandler(false) : undefined;
+      },
     });
     // console.log(data);
   }
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={cancelHandler ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
           type="text"
@@ -91,7 +101,12 @@ function CreateCabinForm() {
 
       <FormRow label="" error="">
         <>
-          <Button size="medium" variation="secondary" type="reset">
+          <Button
+            size="medium"
+            variation="secondary"
+            type="reset"
+            onClick={cancelHandler ? () => cancelHandler(false) : undefined}
+          >
             Cancel
           </Button>
           <Button size="medium" variation="primary" disabled={isPending}>
