@@ -173,6 +173,7 @@ type Database = {
           id: number;
           maxBookingLength: number | null;
           minBookingLength: number | null;
+          maxGuestsPerBooking?: number | null;
         };
         Insert: {
           breakfastPrice?: number | null;
@@ -180,6 +181,7 @@ type Database = {
           id?: number;
           maxBookingLength?: number | null;
           minBookingLength?: number | null;
+          maxGuestsPerBooking?: number | null;
         };
         Update: {
           breakfastPrice?: number | null;
@@ -187,6 +189,7 @@ type Database = {
           id?: number;
           maxBookingLength?: number | null;
           minBookingLength?: number | null;
+          maxGuestsPerBooking?: number | null;
         };
         Relationships: [];
       };

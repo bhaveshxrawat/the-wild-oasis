@@ -1,9 +1,8 @@
-import { deleteCabin } from "@/services/apiCabins";
 import { formatCurrency } from "@/utils/helpers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import styled from "styled-components";
 import { useDeleteCabin } from "./hooks/useDeleteCabin";
+import { HiSquare2Stack, HiTrash } from "react-icons/hi2";
+import { useCreateCabin } from "./hooks/useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,6 +45,7 @@ const Discount = styled.div`
 
 function CabinRow({ cabin }: { cabin: CabinProps }) {
   const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { createCabin } = useCreateCabin();
   const {
     id: cabinID,
     name,
@@ -54,18 +54,39 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
     discount,
     image,
   } = cabin;
+  function handleDuplicateCabin() {
+    // @ts-expect-error local-db discrepancy
+    createCabin({
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+      name: `Copy of ${name}`,
+      description: cabin.description,
+    });
+  }
   return (
     <TableRow role="row">
-      <Img src={image} alt="" />
+      <Img
+        src={
+          typeof cabin.image === "object" ? cabin.image[0].name : cabin.image
+        }
+        alt=""
+      />
       <Cabin>{name}</Cabin>
       <div>
         Ideal for {maxCapacity} {"guest(s)"}
       </div>
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => deleteCabin(cabinID)} disabled={isDeleting}>
-        Delete
-      </button>
+      <div className="flex items-center gap-1">
+        <button onClick={handleDuplicateCabin}>
+          <HiSquare2Stack />
+        </button>
+        <button onClick={() => deleteCabin(cabinID)} disabled={isDeleting}>
+          <HiTrash />
+        </button>
+      </div>
     </TableRow>
   );
 }

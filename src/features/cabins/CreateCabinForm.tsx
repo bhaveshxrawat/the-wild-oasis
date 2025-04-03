@@ -9,20 +9,17 @@ import { useCreateCabin } from "./hooks/useCreateCabin";
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } =
-    useForm<CabinPropsLocal>();
+    useForm<CabinProps>();
   const { errors } = formState;
   const { createCabin, isPending } = useCreateCabin();
-  function onSubmit(data: CabinPropsLocal) {
+  function onSubmit(data: CabinProps) {
     createCabin(data, {
       onSuccess: () => reset(),
     });
     // console.log(data);
   }
-  function onError(errors: any) {
-    console.log(errors);
-  }
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
           type="text"
@@ -84,8 +81,12 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <FormRow label="Cabin photo" error="">
-        <FileInput id="image" accept="image/*" {...register("image")} />
+      <FormRow label="Cabin photo" error={errors.image?.message}>
+        <FileInput
+          id="image"
+          accept="image/*"
+          {...register("image", { required: "This field is required" })}
+        />
       </FormRow>
 
       <FormRow label="" error="">

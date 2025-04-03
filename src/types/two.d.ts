@@ -6,9 +6,13 @@ interface CabinProps {
   regularPrice: number;
   discount: number;
   description: string;
-  image: string;
+  image: string | FileList;
 }
 
-interface CabinPropsLocal extends CabinProps {
-  image: FileList;
+interface SettingsProps {
+  id: number;
+  minBookingLength: number;
+  maxBookingLength: number;
+  maxGuestsPerBooking: number;
+  breakfastPrice: number;
 }
