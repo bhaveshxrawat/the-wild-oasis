@@ -1,4 +1,10 @@
-import { use, useState, createContext, cloneElement } from "react";
+import React, {
+  use,
+  useState,
+  createContext,
+  cloneElement,
+  useRef,
+} from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
@@ -100,11 +106,16 @@ function Window({
   name: string;
 }) {
   const { openName, close } = useModalContext();
-
+  const modalRef = useRef<HTMLDivElement>(null);
+  function handleOutsideClick(e: React.MouseEvent<HTMLDivElement>) {
+    if (!modalRef.current) return;
+    if (e.target instanceof Node && modalRef.current.contains(e.target)) return;
+    close();
+  }
   if (name !== openName) return null;
   return createPortal(
-    <Overlay>
-      <StyledModal>
+    <Overlay onClick={handleOutsideClick}>
+      <StyledModal ref={modalRef}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
@@ -117,25 +128,5 @@ function Window({
 
 Modal.Open = Open;
 Modal.Window = Window;
-
-// function Modal({
-//   children,
-//   onClose,
-// }: {
-//   children: React.ReactNode;
-//   onClose: React.MouseEventHandler<HTMLButtonElement>;
-// }) {
-//   return createPortal(
-//     <Overlay>
-//       <StyledModal>
-//         <Button onClick={onClose}>
-//           <HiXMark />
-//         </Button>
-//         <div>{children}</div>
-//       </StyledModal>
-//     </Overlay>,
-//     document.body
-//   );
-// }
 
 export default Modal;
