@@ -1,3 +1,4 @@
+import { use, useState, createContext, cloneElement } from "react";
 import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
@@ -51,24 +52,90 @@ const Button = styled.button`
   }
 `;
 
-function Modal({
+type ModalContextProps = {
+  openName: string;
+  close: () => void;
+  open: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const ModalContext = createContext<ModalContextProps | null>(null);
+
+function Modal({ children }: { children: React.ReactNode }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = setOpenName;
+  return (
+    <ModalContext.Provider value={{ openName, close, open }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function useModalContext() {
+  const context = use(ModalContext);
+  if (context === null) throw new Error("There is not Modal Context");
+  return context;
+}
+
+function Open({
   children,
-  onClose,
+  opens: opensWindowName,
 }: {
-  children: React.ReactNode;
-  onClose: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactElement & { props: { onClick?: () => void } };
+  opens: string;
 }) {
+  const { open } = useModalContext();
+  return cloneElement(children, { onClick: () => open(opensWindowName) });
+}
+
+function Window({
+  children,
+  name,
+}: {
+  children: React.ReactElement & {
+    props: {
+      cancelHandler?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+    };
+  };
+  name: string;
+}) {
+  const { openName, close } = useModalContext();
+
+  if (name !== openName) return null;
   return createPortal(
     <Overlay>
       <StyledModal>
-        <Button onClick={onClose}>
+        <Button onClick={close}>
           <HiXMark />
         </Button>
-        <div>{children}</div>
+        <div>{cloneElement(children, { cancelHandler: close })}</div>
       </StyledModal>
     </Overlay>,
     document.body
   );
 }
+
+Modal.Open = Open;
+Modal.Window = Window;
+
+// function Modal({
+//   children,
+//   onClose,
+// }: {
+//   children: React.ReactNode;
+//   onClose: React.MouseEventHandler<HTMLButtonElement>;
+// }) {
+//   return createPortal(
+//     <Overlay>
+//       <StyledModal>
+//         <Button onClick={onClose}>
+//           <HiXMark />
+//         </Button>
+//         <div>{children}</div>
+//       </StyledModal>
+//     </Overlay>,
+//     document.body
+//   );
+// }
 
 export default Modal;
