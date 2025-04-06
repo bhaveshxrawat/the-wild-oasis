@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useDeleteCabin } from "./hooks/useDeleteCabin";
 import { HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateCabin } from "./hooks/useCreateCabin";
+import Modal from "@/ui/Modal";
+import ConfirmDelete from "@/ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -83,9 +85,20 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
         <button onClick={handleDuplicateCabin}>
           <HiSquare2Stack />
         </button>
-        <button onClick={() => deleteCabin(cabinID)} disabled={isDeleting}>
-          <HiTrash />
-        </button>
+        <Modal>
+          <Modal.Open opens="delete">
+            <button>
+              <HiTrash />
+            </button>
+          </Modal.Open>
+          <Modal.Window name="delete">
+            <ConfirmDelete
+              resourceName="cabin"
+              disabled={isDeleting}
+              onConfirm={() => deleteCabin(cabinID)}
+            />
+          </Modal.Window>
+        </Modal>
       </div>
     </TableRow>
   );

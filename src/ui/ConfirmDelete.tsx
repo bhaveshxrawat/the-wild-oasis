@@ -20,7 +20,17 @@ const StyledConfirmDelete = styled.div`
   }
 `;
 
-function ConfirmDelete({ resourceName, onConfirm, disabled }) {
+function ConfirmDelete({
+  resourceName,
+  onConfirm,
+  disabled,
+  cancelHandler,
+}: {
+  resourceName: string;
+  onConfirm: () => void;
+  disabled: boolean;
+  cancelHandler?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+}) {
   return (
     <StyledConfirmDelete>
       <Heading as="h3">Delete {resourceName}</Heading>
@@ -30,10 +40,20 @@ function ConfirmDelete({ resourceName, onConfirm, disabled }) {
       </p>
 
       <div>
-        <Button variation="secondary" disabled={disabled}>
+        <Button
+          variation="secondary"
+          disabled={disabled}
+          size="medium"
+          onClick={cancelHandler ? () => cancelHandler(false) : undefined}
+        >
           Cancel
         </Button>
-        <Button variation="danger" disabled={disabled}>
+        <Button
+          variation="danger"
+          disabled={disabled}
+          size="medium"
+          onClick={onConfirm}
+        >
           Delete
         </Button>
       </div>
