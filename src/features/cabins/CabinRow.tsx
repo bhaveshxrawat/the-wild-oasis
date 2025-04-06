@@ -5,18 +5,8 @@ import { HiSquare2Stack, HiTrash } from "react-icons/hi2";
 import { useCreateCabin } from "./hooks/useCreateCabin";
 import Modal from "@/ui/Modal";
 import ConfirmDelete from "@/ui/ConfirmDelete";
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: var(--gtc);
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+import Table from "@/ui/Table";
+import Menus from "@/ui/Menus";
 
 const Img = styled.img`
   display: block;
@@ -68,7 +58,7 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
     });
   }
   return (
-    <TableRow role="row">
+    <Table.Row>
       <Img
         src={
           typeof cabin.image === "object" ? cabin.image[0].name : cabin.image
@@ -99,8 +89,20 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
             />
           </Modal.Window>
         </Modal>
+        <Menus.Menu>
+          <Menus.Toggle id={cabinID} />
+          <Menus.List id={cabinID}>
+            <Menus.Button
+              icon={<HiSquare2Stack />}
+              onClick={handleDuplicateCabin}
+            >
+              Duplicate
+            </Menus.Button>
+            <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+          </Menus.List>
+        </Menus.Menu>
       </div>
-    </TableRow>
+    </Table.Row>
   );
 }
 
