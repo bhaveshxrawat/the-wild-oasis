@@ -72,15 +72,21 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
       <Price>{formatCurrency(regularPrice)}</Price>
       <Discount>{formatCurrency(discount)}</Discount>
       <div className="flex items-center gap-1">
-        <button onClick={handleDuplicateCabin}>
-          <HiSquare2Stack />
-        </button>
         <Modal>
-          <Modal.Open opens="delete">
-            <button>
-              <HiTrash />
-            </button>
-          </Modal.Open>
+          <Menus.Menu>
+            <Menus.Toggle id={cabinID} />
+            <Menus.List id={cabinID}>
+              <Menus.Button
+                icon={<HiSquare2Stack />}
+                onClick={handleDuplicateCabin}
+              >
+                Duplicate
+              </Menus.Button>
+              <Modal.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+          </Menus.Menu>
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName="cabin"
@@ -89,18 +95,6 @@ function CabinRow({ cabin }: { cabin: CabinProps }) {
             />
           </Modal.Window>
         </Modal>
-        <Menus.Menu>
-          <Menus.Toggle id={cabinID} />
-          <Menus.List id={cabinID}>
-            <Menus.Button
-              icon={<HiSquare2Stack />}
-              onClick={handleDuplicateCabin}
-            >
-              Duplicate
-            </Menus.Button>
-            <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
-          </Menus.List>
-        </Menus.Menu>
       </div>
     </Table.Row>
   );
