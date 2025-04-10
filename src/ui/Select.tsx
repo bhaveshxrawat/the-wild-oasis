@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const StyledSelect = styled.select`
+type StyledSelectProps = {
+  type?: string;
+};
+
+const StyledSelect = styled.select<StyledSelectProps>`
   font-size: 1.4rem;
   padding: 0.8rem 1.2rem;
   border: 1px solid
@@ -13,3 +17,27 @@ const StyledSelect = styled.select`
   font-weight: 500;
   box-shadow: var(--shadow-sm);
 `;
+
+function Select({
+  options,
+  value,
+  type,
+  onChange,
+}: {
+  options: Record<"value" | "label", string>[];
+  value: string;
+  type: string;
+  onChange: React.ChangeEventHandler<HTMLSelectElement> | undefined;
+}) {
+  return (
+    <StyledSelect value={value} type={type} onChange={onChange}>
+      {options.map((option) => (
+        <option value={option.value} key={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </StyledSelect>
+  );
+}
+
+export default Select;
