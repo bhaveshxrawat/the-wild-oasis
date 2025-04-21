@@ -1,7 +1,7 @@
 import { createContext, use } from "react";
 import styled from "styled-components";
 interface CommonRowProps {
-  columns: string;
+  $columns: string;
 }
 
 const StyledTable = styled.div`
@@ -15,7 +15,7 @@ const StyledTable = styled.div`
 
 const CommonRow = styled.div<CommonRowProps>`
   display: grid;
-  grid-template-columns: ${(props) => props.columns};
+  grid-template-columns: ${(props) => props.$columns};
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
@@ -91,7 +91,7 @@ function Table({
 function Header({ children }: { children: React.ReactNode }) {
   const { columns } = useTableContext();
   return (
-    <StyledHeader columns={columns} role="columnheader" as="header">
+    <StyledHeader $columns={columns} role="columnheader" as="header">
       {children}
     </StyledHeader>
   );
@@ -99,7 +99,7 @@ function Header({ children }: { children: React.ReactNode }) {
 function Row({ children }: { children: React.ReactNode }) {
   const { columns } = useTableContext();
   return (
-    <StyledRow columns={columns} role="row">
+    <StyledRow $columns={columns} role="row">
       {children}
     </StyledRow>
   );

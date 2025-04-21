@@ -41,17 +41,17 @@ function ConfirmDelete({
 
       <div>
         <Button
-          variation="secondary"
+          $variation="secondary"
           disabled={disabled}
-          size="medium"
+          $size="medium"
           onClick={cancelHandler ? () => cancelHandler(false) : undefined}
         >
           Cancel
         </Button>
         <Button
-          variation="danger"
+          $variation="danger"
           disabled={disabled}
-          size="medium"
+          $size="medium"
           onClick={onConfirm}
         >
           Delete
