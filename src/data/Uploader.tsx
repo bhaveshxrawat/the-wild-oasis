@@ -153,7 +153,7 @@ function Uploader() {
 
       <Button
         size="medium"
-        variation="secondary"
+        variation="primary"
         onClick={uploadBookings}
         disabled={isLoading}
       >
