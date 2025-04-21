@@ -47,6 +47,11 @@ function BookingRow({
     guests: { fullName: guestName, email },
     cabins: { name: cabinName },
   },
+}: {
+  booking: {
+    status: "unconfirmed" | "checked-in" | "checked-out";
+    [key: string]: any;
+  };
 }) {
   const statusToTagName = {
     unconfirmed: "blue",
