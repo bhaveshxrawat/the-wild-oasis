@@ -7,10 +7,10 @@ import {
   HiOutlineHomeModern,
 } from "react-icons/hi2";
 
-import DataItem from "../../ui/DataItem";
-import { Flag } from "../../ui/Flag";
+import DataItem from "@/ui/DataItem";
+import { Flag } from "@/ui/Flag";
 
-import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { formatDistanceFromNow, formatCurrency } from "@/utils/helpers";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -68,7 +68,11 @@ const Guest = styled.div`
   }
 `;
 
-const Price = styled.div`
+interface Price {
+  $isPaid: boolean;
+}
+
+const Price = styled.div<Price>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -77,9 +81,9 @@ const Price = styled.div`
   margin-top: 2.4rem;
 
   background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+    props.$isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
   color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+    props.$isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
   & p:last-child {
     text-transform: uppercase;

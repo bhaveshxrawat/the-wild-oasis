@@ -4,13 +4,11 @@ import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 
 const StyledMenu = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   position: relative;
 `;
 
 const StyledToggle = styled.button`
+  display: flex;
   background: none;
   border: none;
   padding: 0.4rem;
@@ -31,13 +29,11 @@ const StyledToggle = styled.button`
 
 const StyledList = styled.ul`
   position: absolute;
-
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
-
-  right: 24px;
-  top: 24px;
+  right: 0;
+  margin-top: 0.25rem;
 `;
 
 const StyledButton = styled.button`
@@ -48,7 +44,7 @@ const StyledButton = styled.button`
   padding: 1.2rem 2.4rem;
   font-size: 1.4rem;
   transition: all 0.2s;
-
+  min-width: max-content;
   display: flex;
   align-items: center;
   gap: 1.6rem;
@@ -109,7 +105,11 @@ function List({ id, children }: { id: number; children: React.ReactNode }) {
   const { activeID, close } = useMenuContext();
   const ref = useClickOutside<HTMLUListElement>(close);
   if (activeID !== id) return null;
-  return <StyledList ref={ref}>{children}</StyledList>;
+  return (
+    <StyledList className="menu-list" ref={ref}>
+      {children}
+    </StyledList>
+  );
 }
 function Button({
   children,

@@ -38,7 +38,7 @@ const StyledRow = styled(CommonRow)`
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
-  &:focus-within {
+  &:has(ul.menu-list) {
     z-index: 1;
   }
 `;

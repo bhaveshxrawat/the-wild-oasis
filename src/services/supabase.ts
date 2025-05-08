@@ -1,4 +1,4 @@
-import { Database } from "@/types/db";
+import { Database } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
 
 export const supabaseUrl = "https://bwqalwancrvxeydcrlsi.supabase.co";
