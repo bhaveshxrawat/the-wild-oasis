@@ -27,7 +27,7 @@ export function useCheckIn() {
       }),
     onSuccess: (data) => {
       toast.success(`Booking #${data.id} successfully checked in`);
-      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      queryClient.invalidateQueries({ queryKey: ["bookings"] });
       navigate("/bookings");
     },
 

@@ -23,14 +23,13 @@ const StyledConfirmDelete = styled.div`
 function ConfirmDelete({
   resourceName,
   onConfirm,
-  disabled,
   cancelHandler,
+  ...props
 }: {
   resourceName: string;
   onConfirm: () => void;
-  disabled: boolean;
   cancelHandler?: React.Dispatch<React.SetStateAction<boolean>> | undefined;
-}) {
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <StyledConfirmDelete>
       <Heading as="h3">Delete {resourceName}</Heading>
@@ -42,17 +41,17 @@ function ConfirmDelete({
       <div>
         <Button
           $variation="secondary"
-          disabled={disabled}
           $size="medium"
           onClick={cancelHandler ? () => cancelHandler(false) : undefined}
+          {...props}
         >
           Cancel
         </Button>
         <Button
           $variation="danger"
-          disabled={disabled}
           $size="medium"
           onClick={onConfirm}
+          {...props}
         >
           Delete
         </Button>

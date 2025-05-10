@@ -115,11 +115,12 @@ function Button({
   children,
   icon,
   onClick,
+  ...props
 }: {
   children: React.ReactNode;
   icon: React.ReactNode;
   onClick?: () => void;
-}) {
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const { close } = useMenuContext();
 
   function handleClick() {
@@ -128,7 +129,7 @@ function Button({
   }
   return (
     <li>
-      <StyledButton onClick={handleClick}>
+      <StyledButton onClick={handleClick} {...props}>
         {icon}
         <span>{children}</span>
       </StyledButton>
