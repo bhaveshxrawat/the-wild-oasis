@@ -3,7 +3,7 @@ import Button from "@/ui/Button";
 import Form from "@/ui/Form";
 import Input from "@/ui/Input";
 import FormRow from "@/ui/FormRow";
-import { useLogin } from "./useLogin";
+import { useLogin } from "./hooks/useLogin";
 import SpinnerMini from "@/ui/SpinnerMini";
 
 function LoginForm() {
@@ -14,7 +14,15 @@ function LoginForm() {
   function handleSubmit(ev: FormEvent) {
     ev.preventDefault();
     if (!email || !password) return;
-    login({ email, password });
+    login(
+      { email, password },
+      {
+        onSettled: () => {
+          setEmail("");
+          setPassword("");
+        },
+      }
+    );
   }
 
   return (
