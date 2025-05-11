@@ -9,6 +9,13 @@ interface CabinProps {
   image: string | FileList;
 }
 
+interface AddUserProps {
+  fullName: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
+
 interface SettingsProps {
   id: number;
   minBookingLength: number;
