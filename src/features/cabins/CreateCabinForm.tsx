@@ -28,7 +28,7 @@ function CreateCabinForm({
   return (
     <Form
       onSubmit={handleSubmit(onSubmit)}
-      type={cancelHandler ? "modal" : "regular"}
+      $type={cancelHandler ? "modal" : "regular"}
     >
       <FormRow label="Cabin name" error={errors.name?.message}>
         <Input
@@ -102,14 +102,14 @@ function CreateCabinForm({
       <FormRow label="" error="">
         <>
           <Button
-            size="medium"
-            variation="secondary"
+            $size="medium"
+            $variation="secondary"
             type="reset"
             onClick={cancelHandler ? () => cancelHandler(false) : undefined}
           >
             Cancel
           </Button>
-          <Button size="medium" variation="primary" disabled={isPending}>
+          <Button $size="medium" $variation="primary" disabled={isPending}>
             Add cabin
           </Button>
         </>

@@ -1,18 +1,25 @@
-import { useState } from "react";
-import Button from "../../ui/Button";
-import Form from "../../ui/Form";
-import Input from "../../ui/Input";
-import FormRowVertical from "../../ui/FormRowVertical";
+import { FormEvent, useState } from "react";
+import Button from "@/ui/Button";
+import Form from "@/ui/Form";
+import Input from "@/ui/Input";
+import FormRow from "@/ui/FormRow";
+import { useLogin } from "./useLogin";
+import SpinnerMini from "@/ui/SpinnerMini";
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("mickey@example.com");
+  const [password, setPassword] = useState("mickey@123");
+  const { login, isLoggingIn } = useLogin();
 
-  function handleSubmit() {}
+  function handleSubmit(ev: FormEvent) {
+    ev.preventDefault();
+    if (!email || !password) return;
+    login({ email, password });
+  }
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <FormRowVertical label="Email address">
+    <Form onSubmit={handleSubmit} $type="regular">
+      <FormRow label="Email address" $direction="vertical">
         <Input
           type="email"
           id="email"
@@ -20,22 +27,24 @@ function LoginForm() {
           autoComplete="username"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoggingIn}
         />
-      </FormRowVertical>
-      <FormRowVertical label="Password">
+      </FormRow>
+      <FormRow label="Password" $direction="vertical">
         <Input
           type="password"
           id="password"
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoggingIn}
         />
-      </FormRowVertical>
-      <FormRowVertical>
-        <Button $size="large" $variation="primary">
-          Login
+      </FormRow>
+      <FormRow>
+        <Button $size="large" $variation="primary" disabled={isLoggingIn}>
+          {!isLoggingIn ? "Login" : <SpinnerMini />}
         </Button>
-      </FormRowVertical>
+      </FormRow>
     </Form>
   );
 }
