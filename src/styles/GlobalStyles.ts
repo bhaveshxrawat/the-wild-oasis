@@ -94,6 +94,10 @@ button {
   cursor: pointer;
 }
 
+button:has(> svg:only-child) {
+  line-height: 0;
+}
+
 *:disabled {
   cursor: not-allowed;
 }

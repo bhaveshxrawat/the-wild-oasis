@@ -3,21 +3,26 @@ import Button from "../../ui/Button";
 import Form from "../../ui/Form";
 import FormRow from "../../ui/FormRow";
 import Input from "../../ui/Input";
+import { useUpdateUser } from "./hooks/useUpdateUser";
 
-import { useUpdateUser } from "./useUpdateUser";
+interface UpdatePWDForm {
+  password: string;
+  passwordConfirm: string;
+}
 
 function UpdatePasswordForm() {
-  const { register, handleSubmit, formState, getValues, reset } = useForm();
+  const { register, handleSubmit, formState, getValues, reset } =
+    useForm<UpdatePWDForm>();
   const { errors } = formState;
 
-  const { updateUser, isUpdating } = useUpdateUser();
+  const { update, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
+  function onSubmit({ password }: { password: string }) {
+    update({ password }, { onSuccess: () => reset() });
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)} $type="regular">
       <FormRow
         label="Password (min 8 characters)"
         error={errors?.password?.message}
@@ -54,10 +59,12 @@ function UpdatePasswordForm() {
         />
       </FormRow>
       <FormRow>
-        <Button onClick={reset} type="reset" variation="secondary">
-          Cancel
-        </Button>
-        <Button disabled={isUpdating}>Update password</Button>
+        <>
+          <Button onClick={() => reset()} type="reset" $variation="secondary">
+            Cancel
+          </Button>
+          <Button disabled={isUpdating}>Update password</Button>
+        </>
       </FormRow>
     </Form>
   );

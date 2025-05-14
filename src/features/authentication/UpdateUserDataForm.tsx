@@ -1,31 +1,39 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
-import Button from "../../ui/Button";
-import FileInput from "../../ui/FileInput";
-import Form from "../../ui/Form";
-import FormRow from "../../ui/FormRow";
-import Input from "../../ui/Input";
-
-import { useUser } from "./useUser";
+import Button from "@/ui/Button";
+import FileInput from "@/ui/FileInput";
+import Form from "@/ui/Form";
+import FormRow from "@/ui/FormRow";
+import Input from "@/ui/Input";
+import { useUser } from "./hooks/useUser";
+import { useUpdateUser } from "./hooks/useUpdateUser";
 
 function UpdateUserDataForm() {
-  // We don't need the loading state, and can immediately use the user data, because we know that it has already been loaded at this point
-  const {
-    user: {
-      email,
-      user_metadata: { fullName: currentFullName },
-    },
-  } = useUser();
+  const { user } = useUser();
+  const { update, isUpdating } = useUpdateUser();
+  const email = user?.email;
+  const { fullName: currentFullName } = user?.user_metadata!;
 
   const [fullName, setFullName] = useState(currentFullName);
-  const [avatar, setAvatar] = useState(null);
+  const [avatar, setAvatar] = useState<File | null>(null);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (fullName)
+      update(
+        { fullName, avatar },
+        {
+          onSettled: () => {
+            setFullName(currentFullName);
+            setAvatar(null);
+            e.currentTarget.reset();
+          },
+        }
+      );
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} $type="regular">
       <FormRow label="Email address">
         <Input value={email} disabled />
       </FormRow>
@@ -41,14 +49,22 @@ function UpdateUserDataForm() {
         <FileInput
           id="avatar"
           accept="image/*"
-          onChange={(e) => setAvatar(e.target.files[0])}
+          onChange={(e) => {
+            if (e.target.files && e.target.files[0]) {
+              setAvatar(e.target.files[0]);
+            } else {
+              setAvatar(null);
+            }
+          }}
         />
       </FormRow>
       <FormRow>
-        <Button type="reset" variation="secondary">
-          Cancel
-        </Button>
-        <Button>Update account</Button>
+        <>
+          <Button type="reset" $variation="secondary" disabled={isUpdating}>
+            Cancel
+          </Button>
+          <Button disabled={isUpdating}>Update account</Button>
+        </>
       </FormRow>
     </Form>
   );

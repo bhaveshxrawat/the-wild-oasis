@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 
-type RowProps = { type: "horizontal" | "vertical" };
+type RowProps = { $type: "horizontal" | "vertical" };
 
 const types = {
   horizontal: css`
@@ -15,11 +15,11 @@ const types = {
 const Row = styled.div<RowProps>`
   display: flex;
   gap: 1.6rem;
-  ${(props: RowProps) => types[props.type]}
+  ${(props: RowProps) => types[props.$type]}
 `;
 
 Row.defaultProps = {
-  type: "vertical",
+  $type: "vertical",
 };
 
 export default Row;
