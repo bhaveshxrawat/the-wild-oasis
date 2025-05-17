@@ -50,7 +50,7 @@ export async function getBooking(id: number) {
     .eq("id", id)
     .single();
 
-  if (error) {  
+  if (error) {
     console.error(error);
     throw new Error("Booking not found");
   }
@@ -70,7 +70,6 @@ export async function getBookingsAfterDate(date: string | Date) {
     console.error(error);
     throw new Error("Bookings could not get loaded");
   }
-
   return data;
 }
 
