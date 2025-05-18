@@ -5,6 +5,7 @@ import { useRecentStays } from "./hooks/useRecentStays";
 import Stats from "./Stats";
 import Empty from "@/ui/Empty";
 import { useCabins } from "../cabins/hooks/useCabins";
+import SalesChart from "./SalesChart";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -32,6 +33,7 @@ function DashboardLayout() {
         numDays={numDays}
         cabinCount={cabins!.length}
       />
+      <SalesChart />
     </StyledDashboardLayout>
   );
 }
