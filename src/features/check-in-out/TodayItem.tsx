@@ -1,3 +1,8 @@
+import { Database } from "@/types/supabase";
+import Button from "@/ui/Button";
+import { Flag } from "@/ui/Flag";
+import Tag from "@/ui/Tag";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledTodayItem = styled.li`
@@ -18,3 +23,41 @@ const StyledTodayItem = styled.li`
 const Guest = styled.div`
   font-weight: 500;
 `;
+
+type GuestInfo = {
+  fullName: string | null;
+  nationality: string | null;
+  countryFlag: string | null;
+};
+
+type BookingWithGuest = Database["public"]["Tables"]["bookings"]["Row"] & {
+  guests: GuestInfo | null;
+};
+
+function TodayItem({ activity }: { activity: BookingWithGuest }) {
+  const { id, status, guests, numNights } = activity;
+  return (
+    <StyledTodayItem>
+      {status === "unconfirmed" && <Tag type="green">Arriving</Tag>}
+      {status === "checked-in" && <Tag type="blue">Departing</Tag>}
+
+      <Flag
+        src={guests?.countryFlag ?? undefined}
+        alt={`Guest's country flag`}
+      />
+      <Guest>{guests?.fullName}</Guest>
+      <div>{numNights} nights</div>
+      {status === "unconfirmed" && (
+        <Button
+          $size="small"
+          $variation="primary"
+          as={Link}
+          to={`/checkin/${id}`}
+        >
+          Check in
+        </Button>
+      )}
+    </StyledTodayItem>
+  );
+}
+export default TodayItem;

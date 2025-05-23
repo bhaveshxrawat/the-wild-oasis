@@ -1,6 +1,7 @@
 import { PAGE_SIZE } from "@/utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
+import { Database } from "@/types/supabase";
 
 export async function getBookings({
   filter,
@@ -111,7 +112,10 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-export async function updateBooking(id: number, obj) {
+export async function updateBooking(
+  id: number,
+  obj: Database["public"]["Tables"]["bookings"]["Update"]
+) {
   const { data, error } = await supabase
     .from("bookings")
     .update(obj)
