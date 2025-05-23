@@ -6,7 +6,7 @@ import Spinner from "@/ui/Spinner";
 import { useUpdateSetting } from "./hooks/useEditSettings";
 
 function UpdateSettingsForm() {
-  const { error, isLoading, settings } = useSettings();
+  const { isLoading, settings } = useSettings();
   const { isUpdating, updateSetting } = useUpdateSetting();
   if (!settings) return null;
   const {
@@ -22,7 +22,7 @@ function UpdateSettingsForm() {
     updateSetting({ [field]: value });
   }
   return (
-    <Form>
+    <Form $type="regular">
       <FormRow label="Minimum nights/booking" error="">
         <Input
           type="number"

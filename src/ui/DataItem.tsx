@@ -1,3 +1,4 @@
+import { PropsWithChildren } from "react";
 import styled from "styled-components";
 
 const StyledDataItem = styled.div`
@@ -20,7 +21,12 @@ const Label = styled.span`
   }
 `;
 
-function DataItem({ icon, label, children }) {
+type Data = PropsWithChildren<{
+  icon: React.ReactNode;
+  label: string;
+}>;
+
+function DataItem({ icon, label, children }: Data) {
   return (
     <StyledDataItem>
       <Label>

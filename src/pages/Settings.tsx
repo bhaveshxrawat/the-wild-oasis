@@ -4,7 +4,7 @@ import UpdateSettingsForm from "@/features/settings/UpdateSettingsForm";
 
 function Settings() {
   return (
-    <Row type="vertical">
+    <Row $type="vertical">
       <Heading as="h1">Update hotel settings</Heading>
       <UpdateSettingsForm />
     </Row>

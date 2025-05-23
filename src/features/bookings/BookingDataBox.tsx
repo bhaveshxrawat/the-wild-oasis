@@ -11,6 +11,7 @@ import DataItem from "@/ui/DataItem";
 import { Flag } from "@/ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "@/utils/helpers";
+import { Database } from "@/types/supabase";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -105,8 +106,19 @@ const Footer = styled.footer`
   text-align: right;
 `;
 
+type Guest = Omit<
+  Database["public"]["Tables"]["guests"]["Row"],
+  "id" | "nationality"
+>;
+type Cabins = Pick<Database["public"]["Tables"]["cabins"]["Row"], "name">;
+
+type BookingWithGuest = Database["public"]["Tables"]["bookings"]["Row"] & {
+  guests: Guest | null;
+  cabins: Cabins | null;
+};
+
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function BookingDataBox({ booking }: { booking: BookingWithGuest }) {
   const {
     created_at,
     startDate,
@@ -119,9 +131,13 @@ function BookingDataBox({ booking }) {
     hasBreakfast,
     observations,
     isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    guests,
+    cabins,
   } = booking;
+
+  if (!guests || !cabins) return null;
+  const { fullName: guestName, email, countryFlag, nationalID } = guests;
+  const { name: cabinName } = cabins;
 
   return (
     <StyledBookingDataBox>
@@ -133,20 +149,27 @@ function BookingDataBox({ booking }) {
           </p>
         </div>
 
-        <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
-            ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
-        </p>
+        {startDate && endDate ? (
+          <p>
+            {format(new Date(startDate), "EEE, MMM dd yyyy")} (
+            {isToday(new Date(startDate))
+              ? "Today"
+              : formatDistanceFromNow(startDate)}
+            ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+          </p>
+        ) : (
+          <p>--</p>
+        )}
       </Header>
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
+          {countryFlag && (
+            <Flag src={countryFlag} alt={`Flag of the resident's country`} />
+          )}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            {guestName}{" "}
+            {numGuests ?? 0 > 1 ? `+ ${numGuests ?? 0 - 1} guests` : ""}
           </p>
           <span>&bull;</span>
           <p>{email}</p>
@@ -167,11 +190,13 @@ function BookingDataBox({ booking }) {
           {hasBreakfast ? "Yes" : "No"}
         </DataItem>
 
-        <Price isPaid={isPaid}>
+        <Price $isPaid={isPaid ?? false}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
-            {formatCurrency(totalPrice)}
+            {totalPrice && formatCurrency(totalPrice)}
 
             {hasBreakfast &&
+              cabinPrice &&
+              extrasPrice &&
               ` (${formatCurrency(cabinPrice)} cabin + ${formatCurrency(
                 extrasPrice
               )} breakfast)`}
