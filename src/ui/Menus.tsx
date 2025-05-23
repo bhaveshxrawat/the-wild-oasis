@@ -1,5 +1,5 @@
 import { useClickOutside } from "@/hooks/useClickOutside";
-import { createContext, use, useState } from "react";
+import React, { createContext, use, useCallback, useState } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 
@@ -92,7 +92,8 @@ function Menu({ children }: { children: React.ReactNode }) {
 
 function Toggle({ id }: { id: number }) {
   const { activeID, close, open } = useMenuContext();
-  function handleClick() {
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
     activeID === null || activeID !== id ? open(id) : close();
   }
   return (
@@ -103,7 +104,11 @@ function Toggle({ id }: { id: number }) {
 }
 function List({ id, children }: { id: number; children: React.ReactNode }) {
   const { activeID, close } = useMenuContext();
-  const ref = useClickOutside<HTMLUListElement>(close);
+  // const ref = useClickOutside<HTMLUListElement>(close);
+  const ref = useClickOutside<HTMLUListElement>(
+    useCallback(() => close(), [close]),
+    false
+  );
   if (activeID !== id) return null;
   return (
     <StyledList className="menu-list" ref={ref}>

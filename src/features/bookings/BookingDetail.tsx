@@ -16,6 +16,7 @@ import { useDeleteBooking } from "./hooks/useDeleteBooking";
 import { useCheckOut } from "../check-in-out/hooks/useCheckOut";
 import Modal from "@/ui/Modal";
 import ConfirmDelete from "@/ui/ConfirmDelete";
+import Empty from "@/ui/Empty";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -32,8 +33,7 @@ function BookingDetail() {
   const moveBack = useMoveBack();
 
   if (isLoading) return <Spinner />;
-  if (!booking) return null;
-
+  if (!booking) return <Empty resource="booking" />;
   const { status, id: bookingID } = booking;
 
   const statusToTagName = {
@@ -44,7 +44,7 @@ function BookingDetail() {
 
   return (
     <>
-      <Row type="horizontal">
+      <Row $type="horizontal">
         <HeadingGroup>
           <Heading as="h1">Booking #{bookingID}</Heading>
           <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
