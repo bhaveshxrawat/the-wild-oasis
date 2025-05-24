@@ -1,15 +1,21 @@
+import { PropsWithChildren, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "@/features/authentication/hooks/useUser";
 import Spinner from "./Spinner";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+type ProtectedRouteProps = PropsWithChildren;
+
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
   const { user, isLoading } = useUser();
+
   useEffect(() => {
-    if (!user && !isLoading) navigate("/login", { replace: true });
-  }, [user, isLoading]);
+    if (!isLoading && !user) {
+      navigate("/login", { replace: true });
+    }
+  }, [user, isLoading, navigate]);
+
   if (isLoading) return <Spinner />;
-  return children;
+
+  return <>{children}</>;
 }
-export default ProtectedRoute;
