@@ -26,7 +26,7 @@ function UpdateUserDataForm() {
           onSettled: () => {
             setFullName(currentFullName);
             setAvatar(null);
-            e.currentTarget.reset();
+            e.currentTarget?.reset();
           },
         }
       );

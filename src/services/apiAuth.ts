@@ -35,7 +35,6 @@ export async function login({
     password,
   });
   if (error) throw new Error(error.message);
-  console.log(data);
   return data;
 }
 export async function logout() {
@@ -46,7 +45,6 @@ export async function getCurrentUser() {
   const { data: session } = await supabase.auth.getSession();
   if (!session) return null;
   const { data, error } = await supabase.auth.getUser();
-  console.log(data);
   if (error) throw new Error(error.message);
   return data.user;
 }
@@ -55,7 +53,11 @@ export async function updateCurrentUser({
   password,
   fullName,
   avatar,
-}: { fullName?: string; avatar?: File | null; password?   : string }) {
+}: {
+  fullName?: string;
+  avatar?: File | null;
+  password?: string;
+}) {
   let updateData;
   if (password) updateData = { password };
   if (fullName) updateData = { data: { fullName } };
@@ -66,7 +68,7 @@ export async function updateCurrentUser({
   if (postUpdateError) throw new Error(postUpdateError.message);
   if (!avatar) return postUpdateData;
 
-  const fileName = `avatar-${postUpdateData.user.id}`;
+  const fileName = `avatar-${postUpdateData.user.id}-${Math.random() * 10}`;
   const { error: storageError } = await supabase.storage
     .from("avatars")
     .upload(fileName, avatar);
