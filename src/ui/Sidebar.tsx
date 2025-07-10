@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
+import Uploader from "@/data/Uploader"
+import { useState } from "react";
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-grey-0);
@@ -12,10 +14,12 @@ const StyledSidebar = styled.aside`
   gap: 3.2rem;
 `;
 function Sidebar() {
+  const [showUploader] = useState(false)
   return (
     <StyledSidebar>
       <Logo />
       <MainNav />
+      {showUploader && <Uploader />}
     </StyledSidebar>
   );
 }
